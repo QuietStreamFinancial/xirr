@@ -17,6 +17,15 @@ module Xirr
   # Iterates though default values and sets in config
   default_values.each do |key, value|
     self.config.send("#{key.to_sym}=", value)
-    const_set key.to_s.upcase.to_sym, value
+  end
+
+  # Allow config values to be accessed via module "constants"
+  # e.g. Xirr::REPLACE_FOR_NIL instead of Xirr.config.replace_for_nil
+  def self.const_missing(symbol)
+    config_key = symbol.to_s.downcase.to_sym
+
+    super unless self.config.has_key?(config_key)
+
+    self.config[config_key]
   end
 end
