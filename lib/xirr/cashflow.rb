@@ -1,5 +1,5 @@
+# frozen_string_literal: true
 module Xirr
-
   # Expands [Array] to store a set of transactions which will be used to calculate the XIRR
   # @note A Cashflow should consist of at least two transactions, one positive and one negative.
   class Cashflow < Array
@@ -59,7 +59,7 @@ module Xirr
       method, options = process_options(method, options)
       if invalid?
         raise ArgumentError, invalid_message if options[:raise_exception]
-        BigDecimal.new(0, Xirr::PRECISION)
+        BigDecimal(0, Xirr::PRECISION)
       else
         xirr = choose_(method).send :xirr, guess, options
         xirr = choose_(other_calculation_method(method)).send(:xirr, guess, options) if (xirr.nil? || xirr.nan?) && fallback
